@@ -1,0 +1,20 @@
+<nav class="navbar">
+  <div class="navbar-brand">
+    <a routerLink="/cardapio">🍽️ Comanda Digital</a>
+  </div>
+  <div class="navbar-links">
+    <a routerLink="/cardapio" routerLinkActive="active">Cardápio</a>
+    <a routerLink="/carrinho" routerLinkActive="active">🛒 Carrinho</a>
+
+    @if (usuario) {
+      <span class="usuario-nome">Olá, {{ usuario.nome }}!</span>
+      @if (isAdmin()) {
+        <a routerLink="/admin" routerLinkActive="active">Admin</a>
+      }
+      <button class="btn-logout" (click)="logout()">Sair</button>
+    } @else {
+      <a routerLink="/login" routerLinkActive="active">Login</a>
+      <a routerLink="/cadastro" routerLinkActive="active" class="btn-cadastro">Cadastre-se</a>
+    }
+  </div>
+</nav>

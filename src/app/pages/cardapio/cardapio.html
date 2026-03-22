@@ -1,0 +1,31 @@
+<div class="cardapio-container">
+  <h1>Nosso Cardápio</h1>
+
+  <div class="categorias-filtro">
+    @for (cat of categorias; track cat) {
+      <button 
+        [class.ativo]="categoriaSelecionada === cat"
+        (click)="filtrar(cat)">
+        {{ cat }}
+      </button>
+    }
+  </div>
+
+  <div class="pratos-grid">
+    @for (prato of pratosFiltrados; track prato.id) {
+      <div class="prato-card">
+        <div class="prato-img">{{ prato.emoji }}</div>
+        <div class="prato-info">
+          <h3>{{ prato.nome }}</h3>
+          <p>{{ prato.descricao }}</p>
+          <div class="prato-footer">
+            <span class="preco">R$ {{ prato.preco.toFixed(2) }}</span>
+            <button class="btn-adicionar" (click)="adicionarAoCarrinho(prato)">
+              + Adicionar
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

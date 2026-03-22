@@ -1,0 +1,20 @@
+<div class="admin-wrapper">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>⚙️ Admin</h2>
+    </div>
+    <nav class="sidebar-menu">
+      @for (item of menuItems; track item.rota) {
+        <a [routerLink]="item.rota" routerLinkActive="ativo" class="menu-item">
+          {{ item.label }}
+        </a>
+      }
+    </nav>
+    <div class="sidebar-footer">
+      <a routerLink="/cardapio" class="btn-voltar-site">🏠 Ver Site</a>
+    </div>
+  </aside>
+  <main class="admin-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

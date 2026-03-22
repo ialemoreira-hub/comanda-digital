@@ -1,0 +1,61 @@
+<div class="dashboard-container">
+  <h1>📊 Dashboard</h1>
+
+  <div class="kpis-grid">
+    <div class="kpi-card" *ngFor="let kpi of kpis" [style.border-left-color]="kpi.cor">
+      <div class="kpi-icone">{{ kpi.icone }}</div>
+      <div class="kpi-info">
+        <span class="kpi-titulo">{{ kpi.titulo }}</span>
+        <span class="kpi-valor" [style.color]="kpi.cor">{{ kpi.valor }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-grid">
+    <div class="card">
+      <h2>🏆 Top 5 Pratos</h2>
+      <div class="top-prato" *ngFor="let prato of topPratos; let i = index">
+        <span class="posicao">{{ i + 1 }}º</span>
+        <span class="prato-emoji">{{ prato.emoji }}</span>
+        <span class="prato-nome">{{ prato.nome }}</span>
+        <span class="prato-qtd">{{ prato.quantidade }} vendidos</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>⚠️ Alertas de Estoque</h2>
+      <div class="alerta-item" *ngFor="let alerta of alertasEstoque">
+        <span class="alerta-nome">{{ alerta.nome }}</span>
+        <span class="alerta-info">{{ alerta.estoque }} / {{ alerta.minimo }} {{ alerta.unidade }}</span>
+        <span class="badge-critico">Crítico</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📋 Pedidos Recentes</h2>
+    <table class="tabela">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Cliente</th>
+          <th>Total</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let pedido of pedidosRecentes">
+          <td>#{{ pedido.id }}</td>
+          <td>{{ pedido.cliente }}</td>
+          <td>R$ {{ pedido.total.toFixed(2) }}</td>
+          <td><span [class]="'badge-' + pedido.status.toLowerCase()">{{ pedido.status }}</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="atalhos">
+    <a routerLink="/admin/pratos" class="atalho">🍽️ Gerenciar Pratos</a>
+    <a routerLink="/admin/categorias" class="atalho">📂 Gerenciar Categorias</a>
+  </div>
+</div>

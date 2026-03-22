@@ -1,0 +1,78 @@
+<div class="admin-container">
+  <div class="admin-header">
+    <h1>📂 Categorias</h1>
+    <button class="btn-novo" (click)="abrirFormulario()">+ Nova Categoria</button>
+  </div>
+
+  @if (sucesso) {
+    <div class="alert-sucesso">{{ sucesso }}</div>
+  }
+
+  @if (mostrarFormulario) {
+    <div class="modal-overlay">
+      <div class="modal">
+        <h2>{{ editando ? 'Editar' : 'Nova' }} Categoria</h2>
+
+        <div class="form-group">
+          <label>Nome *</label>
+          <input type="text" [(ngModel)]="form.nome" placeholder="Nome da categoria" />
+        </div>
+
+        <div class="form-group">
+          <label>Descrição</label>
+          <input type="text" [(ngModel)]="form.descricao" placeholder="Descrição" />
+        </div>
+
+        <div class="form-group">
+          <label>Ordem</label>
+          <input type="number" [(ngModel)]="form.ordem" placeholder="Ordem de exibição" />
+        </div>
+
+        <div class="form-group">
+          <label>Status</label>
+          <select [(ngModel)]="form.status">
+            <option value="ATIVO">Ativo</option>
+            <option value="INATIVO">Inativo</option>
+          </select>
+        </div>
+
+        @if (erro) {
+          <div class="alert-erro">{{ erro }}</div>
+        }
+
+        <div class="modal-acoes">
+          <button class="btn-cancelar" (click)="cancelar()">Cancelar</button>
+          <button class="btn-salvar" (click)="salvar()">Salvar</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <table class="tabela">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Descrição</th>
+        <th>Ordem</th>
+        <th>Status</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (cat of categorias; track cat.id) {
+        <tr>
+          <td>{{ cat.id }}</td>
+          <td>{{ cat.nome }}</td>
+          <td>{{ cat.descricao }}</td>
+          <td>{{ cat.ordem }}</td>
+          <td><span [class]="'badge-' + cat.status.toLowerCase()">{{ cat.status }}</span></td>
+          <td>
+            <button class="btn-editar" (click)="editar(cat)">✏️ Editar</button>
+            <button class="btn-excluir" (click)="excluir(cat.id)">🗑️ Excluir</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

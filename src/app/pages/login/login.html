@@ -1,0 +1,24 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <h2>🔐 Entrar</h2>
+    <p class="auth-subtitle">Acesse sua conta para fazer pedidos</p>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" [(ngModel)]="email" placeholder="seu@email.com" />
+    </div>
+
+    <div class="form-group">
+      <label>Senha</label>
+      <input type="password" [(ngModel)]="senha" placeholder="Sua senha" />
+    </div>
+
+    <div class="alert-erro" *ngIf="erro">{{ erro }}</div>
+
+    <button class="btn-primary" (click)="login()">Entrar</button>
+
+    <p class="auth-link">
+      Não tem conta? <a routerLink="/cadastro">Cadastre-se</a>
+    </p>
+  </div>
+</div>
