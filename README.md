@@ -1,59 +1,50 @@
-# ComandaDigital
+# 🍽️ Comanda Digital
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.3.
+Sistema de comanda digital para restaurantes desenvolvido como trabalho acadêmico na UNASP SP.
 
-## Development server
+## 🛠️ Tecnologias
 
-To start a local development server, run:
+- **Front-end:** Angular 21
+- **Back-end:** Spring Boot (Sprint 2)
+- **Banco de Dados:** MySQL (Sprint 2)
 
+## 📋 Funcionalidades (Sprint 1)
+
+- ✅ Cardápio público com filtro por categoria
+- ✅ Carrinho de compras (adicionar, remover, alterar quantidade)
+- ✅ Cadastro e login de clientes
+- ✅ Confirmação de pedido
+- ✅ Painel administrativo com sidebar
+- ✅ CRUD de pratos e categorias
+
+## 🚀 Como rodar o projeto
+
+### Pré-requisitos
+- Node.js 20+
+- Angular CLI 21+
+
+### Instalação
 ```bash
+# Clonar o repositório
+git clone https://github.com/ialemoreira-hub/comanda-digital.git
+
+# Entrar na pasta
+cd comanda-digital
+
+# Instalar dependências
+npm install
+
+# Rodar o projeto
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Acesse **http://localhost:4200** no navegador.
 
-## Code scaffolding
+## 👤 Usuário Admin (mock)
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- **Email:** admin@email.com
+- **Senha:** senha123
 
-```bash
-ng generate component component-name
-```
+## 👥 Integrante
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- Iale Moreira
