@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
+import { ApiService } from '../../services/api';
 
 @Component({
   selector: 'app-login',
@@ -14,8 +15,9 @@ export class LoginComponent {
   email = '';
   senha = '';
   erro = '';
+  carregando = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private apiService: ApiService) {}
 
   login() {
     if (!this.email || !this.senha) {
@@ -23,23 +25,28 @@ export class LoginComponent {
       return;
     }
 
-    // Admin fixo
-    if (this.email === 'admin@email.com' && this.senha === 'senha123') {
-      localStorage.setItem('usuario', JSON.stringify({ nome: 'Admin', perfil: 'ADMIN', email: this.email }));
-      this.router.navigate(['/admin/dashboard']);
-      return;
-    }
+    this.carregando = true;
+    this.erro = '';
 
-    // Busca usuário cadastrado no localStorage
-    const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
-    const usuario = usuarios.find((u: any) => u.email === this.email && u.senha === this.senha);
-
-    if (usuario) {
-      localStorage.setItem('usuario', JSON.stringify({ nome: usuario.nome, perfil: 'CLIENTE', email: usuario.email }));
-      this.router.navigate(['/cardapio']);
-      return;
-    }
-
-    this.erro = 'Email ou senha inválidos!';
+    this.apiService.login(this.email, this.senha).subscribe({
+      next: (response) => {
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('usuario', JSON.stringify({
+          nome: response.nome,
+          email: response.email,
+          perfil: response.perfil
+        }));
+        this.carregando = false;
+        if (response.perfil === 'ADMIN' || response.perfil === 'GERENTE') {
+          this.router.navigate(['/admin/dashboard']);
+        } else {
+          this.router.navigate(['/cardapio']);
+        }
+      },
+      error: (err) => {
+        this.erro = err.error?.erro || 'Email ou senha inválidos!';
+        this.carregando = false;
+      }
+    });
   }
 }

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
+import { ApiService } from '../../services/api';
 
 @Component({
   selector: 'app-cadastro',
@@ -18,8 +19,9 @@ export class CadastroComponent {
   confirmarSenha = '';
   erro = '';
   sucesso = '';
+  carregando = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private apiService: ApiService) {}
 
   cadastrar() {
     if (!this.nome || !this.email || !this.senha || !this.confirmarSenha) {
@@ -42,15 +44,27 @@ export class CadastroComponent {
       return;
     }
 
-    const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
-    usuarios.push({ nome: this.nome, email: this.email, senha: this.senha, perfil: 'CLIENTE' });
-    localStorage.setItem('usuarios', JSON.stringify(usuarios));
-
+    this.carregando = true;
     this.erro = '';
-    this.sucesso = 'Conta criada com sucesso! Redirecionando...';
 
-    setTimeout(() => {
-      this.router.navigate(['/login']);
-    }, 2000);
+    this.apiService.register(this.nome, this.email, this.senha, this.telefone).subscribe({
+      next: (response) => {
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('usuario', JSON.stringify({
+          nome: response.nome,
+          email: response.email,
+          perfil: response.perfil
+        }));
+        this.sucesso = 'Conta criada com sucesso! Redirecionando...';
+        this.carregando = false;
+        setTimeout(() => {
+          this.router.navigate(['/cardapio']);
+        }, 2000);
+      },
+      error: (err) => {
+        this.erro = err.error?.erro || 'Erro ao criar conta!';
+        this.carregando = false;
+      }
+    });
   }
 }

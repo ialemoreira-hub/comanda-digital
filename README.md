@@ -48,3 +48,4 @@ Acesse **http://localhost:4200** no navegador.
 ## 👥 Integrante
 
 - Iale Moreira
+- Vitor Amorim
