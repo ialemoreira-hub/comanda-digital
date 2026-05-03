@@ -5,7 +5,7 @@ Sistema web completo para gerenciamento de pedidos em dark kitchen, desenvolvido
 **Instituição:** Centro Universitário Adventista de São Paulo (UNASP SP)  
 **Disciplina:** Desenvolvimento Full-Stack (G01371.1)  
 **Professor:** Thiago Silva  
-**Semestre:** 2026/1  
+**Semestre:** 4º
 **Dupla:** Iale Moreira e Vitor Amorim
 
 ---
