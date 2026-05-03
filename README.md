@@ -1,23 +1,23 @@
-# 🍽️ Comanda Digital
+# Comanda Digital
 
 Sistema de comanda digital para restaurantes desenvolvido como trabalho acadêmico na UNASP SP.
 
-## 🛠️ Tecnologias
+## Tecnologias
 
 - **Front-end:** Angular 21
 - **Back-end:** Spring Boot (Sprint 2)
 - **Banco de Dados:** MySQL (Sprint 2)
 
-## 📋 Funcionalidades (Sprint 1)
+## Funcionalidades (Sprint 1)
 
-- ✅ Cardápio público com filtro por categoria
-- ✅ Carrinho de compras (adicionar, remover, alterar quantidade)
-- ✅ Cadastro e login de clientes
-- ✅ Confirmação de pedido
-- ✅ Painel administrativo com sidebar
-- ✅ CRUD de pratos e categorias
+-  Cardápio público com filtro por categoria
+-  Carrinho de compras (adicionar, remover, alterar quantidade)
+-  Cadastro e login de clientes
+-  Confirmação de pedido
+-  Painel administrativo com sidebar
+-  CRUD de pratos e categorias
 
-## 🚀 Como rodar o projeto
+##  Como rodar o projeto
 
 ### Pré-requisitos
 - Node.js 20+
@@ -40,12 +40,12 @@ ng serve
 
 Acesse **http://localhost:4200** no navegador.
 
-## 👤 Usuário Admin (mock)
+##  Usuário Admin (mock)
 
 - **Email:** admin@email.com
 - **Senha:** senha123
 
-## 👥 Integrante
+##  Integrante
 
 - Iale Moreira
 - Vitor Amorim
