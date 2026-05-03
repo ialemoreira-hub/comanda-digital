@@ -10,9 +10,12 @@ import { CommonModule } from '@angular/common';
 })
 export class AdminLayoutComponent {
 
-  menuItems = [
-    { label: '📊 Dashboard', rota: '/admin/dashboard' },
-    { label: '🍽️ Pratos', rota: '/admin/pratos' },
-    { label: '📂 Categorias', rota: '/admin/categorias' },
+ menuItems = [
+    { label: 'Dashboard', rota: '/admin/dashboard' },
+    { label: 'Pedidos', rota: '/admin/pedidos' },
+    { label: 'Cardapio', rota: '/admin/pratos' },
+    { label: 'Categorias', rota: '/admin/categorias' },
+    { label: 'Estoque', rota: '/admin/estoque' },
+    { label: 'Compras', rota: '/admin/compras' },
   ];
 }

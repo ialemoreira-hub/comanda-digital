@@ -1,6 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { ApiService } from '../../../services/api';
+import { Chart, registerables } from 'chart.js';
+
+Chart.register(...registerables);
 
 @Component({
   selector: 'app-dashboard',
@@ -8,33 +12,120 @@ import { RouterLink } from '@angular/router';
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit, AfterViewInit {
 
-  kpis = [
-    { titulo: 'Faturamento do Dia', valor: 'R$ 1.250,00', icone: '💰', cor: '#27ae60' },
-    { titulo: 'Total de Pedidos', valor: '18', icone: '📋', cor: '#3498db' },
-    { titulo: 'Ticket Médio', valor: 'R$ 69,44', icone: '🎯', cor: '#9b59b6' },
-    { titulo: 'Food Cost Médio', valor: '28%', icone: '📊', cor: '#e67e22' },
-  ];
+  @ViewChild('graficoTopPratos') graficoTopPratosRef!: ElementRef;
+  @ViewChild('graficoPedidos') graficoPedidosRef!: ElementRef;
 
-  topPratos = [
-    { nome: 'Picanha na Brasa', quantidade: 12, emoji: '🥩' },
-    { nome: 'Frango Grelhado', quantidade: 9, emoji: '🍗' },
-    { nome: 'Massa ao Molho', quantidade: 7, emoji: '🍝' },
-    { nome: 'Petit Gateau', quantidade: 6, emoji: '🍫' },
-    { nome: 'Bruschetta', quantidade: 5, emoji: '🥖' },
-  ];
+  resumo: any = {};
+  topPratos: any[] = [];
+  alertasEstoque: any[] = [];
+  pedidosRecentes: any[] = [];
+  carregando = true;
 
-  alertasEstoque = [
-    { nome: 'Picanha', estoque: 0.5, minimo: 2, unidade: 'kg' },
-    { nome: 'Creme de Leite', estoque: 1, minimo: 3, unidade: 'L' },
-    { nome: 'Farinha de Trigo', estoque: 0.8, minimo: 2, unidade: 'kg' },
-  ];
+  private chartTopPratos: Chart | null = null;
+  private chartPedidos: Chart | null = null;
 
-  pedidosRecentes = [
-    { id: 1, cliente: 'João Silva', total: 89.90, status: 'PRONTO' },
-    { id: 2, cliente: 'Maria Santos', total: 42.90, status: 'EM_PREPARO' },
-    { id: 3, cliente: 'Pedro Costa', total: 135.80, status: 'CONFIRMADO' },
-    { id: 4, cliente: 'Ana Lima', total: 67.70, status: 'RECEBIDO' },
-  ];
+  constructor(private apiService: ApiService) {}
+
+  ngOnInit() {
+    this.carregarDados();
+  }
+
+  ngAfterViewInit() {}
+
+  carregarDados() {
+    this.apiService.getDashboardResumo().subscribe({
+      next: (data) => this.resumo = data,
+      error: () => {}
+    });
+
+    this.apiService.getDashboardTopPratos().subscribe({
+      next: (data) => {
+        this.topPratos = data;
+        setTimeout(() => this.criarGraficoTopPratos(), 100);
+      },
+      error: () => {}
+    });
+
+    this.apiService.getDashboardAlertasEstoque().subscribe({
+      next: (data) => this.alertasEstoque = data,
+      error: () => {}
+    });
+
+    this.apiService.listarTodosPedidos().subscribe({
+      next: (data) => {
+        this.pedidosRecentes = data
+          .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+          .slice(0, 4);
+        this.carregando = false;
+        setTimeout(() => this.criarGraficoPedidos(), 100);
+      },
+      error: () => this.carregando = false
+    });
+  }
+
+  criarGraficoTopPratos() {
+    if (!this.graficoTopPratosRef || this.topPratos.length === 0) return;
+    if (this.chartTopPratos) this.chartTopPratos.destroy();
+
+    const ctx = this.graficoTopPratosRef.nativeElement.getContext('2d');
+    this.chartTopPratos = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: this.topPratos.map(p => p.nome),
+        datasets: [{
+          label: 'Vendidos',
+          data: this.topPratos.map(p => p.quantidade),
+          backgroundColor: [
+            '#c0392b', '#e74c3c', '#e67e22', '#f39c12', '#d35400'
+          ],
+          borderRadius: 8,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          y: { beginAtZero: true, ticks: { stepSize: 1 } }
+        }
+      }
+    });
+  }
+
+  criarGraficoPedidos() {
+    if (!this.graficoPedidosRef) return;
+    if (this.chartPedidos) this.chartPedidos.destroy();
+
+    const statusCount: any = {
+      'RECEBIDO': 0, 'CONFIRMADO': 0, 'EM_PREPARO': 0,
+      'PRONTO': 0, 'FINALIZADO': 0, 'CANCELADO': 0
+    };
+
+    this.pedidosRecentes.forEach((p: any) => {
+      if (statusCount[p.status] !== undefined) statusCount[p.status]++;
+    });
+
+    const ctx = this.graficoPedidosRef.nativeElement.getContext('2d');
+    this.chartPedidos = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: Object.keys(statusCount),
+        datasets: [{
+          data: Object.values(statusCount),
+          backgroundColor: [
+            '#3498db', '#2ecc71', '#e67e22', '#9b59b6', '#27ae60', '#e74c3c'
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'bottom' }
+        }
+      }
+    });
+  }
 }

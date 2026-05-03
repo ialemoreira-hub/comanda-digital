@@ -1,0 +1,62 @@
+<div class="admin-pedidos">
+  <div class="header">
+    <h2>Gerenciar Pedidos</h2>
+    <button class="btn-atualizar" (click)="carregarPedidos()">Atualizar</button>
+  </div>
+
+  <div *ngIf="carregando" class="carregando">Carregando pedidos...</div>
+
+  <div *ngIf="!carregando && pedidos.length === 0" class="vazio">
+    Nenhum pedido encontrado.
+  </div>
+
+  <div *ngIf="!carregando && pedidos.length > 0" class="lista-pedidos">
+    <div *ngFor="let pedido of pedidos" class="card-pedido">
+
+      <div class="pedido-header">
+        <span class="pedido-numero">Pedido #{{ pedido.id }}</span>
+        <span class="cliente">{{ pedido.clienteNome }}</span>
+        <span [class]="'status ' + getStatusClass(pedido.status)">
+          {{ getStatusLabel(pedido.status) }}
+        </span>
+      </div>
+
+      <div class="pedido-itens">
+        <div *ngFor="let item of pedido.itens" class="item">
+          <span>{{ item.pratoNome }} x{{ item.quantidade }}</span>
+          <span>R$ {{ item.subtotal | number:'1.2-2' }}</span>
+        </div>
+      </div>
+
+      <div *ngIf="pedido.enderecoEntrega" class="endereco">
+        Entregar em: {{ pedido.enderecoEntrega }}
+      </div>
+
+      <div *ngIf="pedido.observacoes" class="observacoes">
+        Obs: {{ pedido.observacoes }}
+      </div>
+
+      <div class="pedido-footer">
+        <span class="data">{{ pedido.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+        <span class="total">Total: R$ {{ pedido.valorTotal | number:'1.2-2' }}</span>
+      </div>
+
+      <div class="acoes" *ngIf="pedido.status !== 'CANCELADO' && pedido.status !== 'FINALIZADO'">
+        <button
+          *ngIf="proximoStatus(pedido.status)"
+          class="btn-avancar"
+          (click)="atualizarStatus(pedido.id, proximoStatus(pedido.status)!)">
+          {{ proximoStatusLabel(pedido.status) }}
+        </button>
+        <button class="btn-cancelar" (click)="cancelarPedido(pedido.id)">
+          Cancelar
+        </button>
+      </div>
+
+      <div *ngIf="pedido.motivoCancelamento" class="motivo">
+        Motivo cancelamento: {{ pedido.motivoCancelamento }}
+      </div>
+
+    </div>
+  </div>
+</div>

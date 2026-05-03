@@ -1,7 +1,8 @@
 <div class="admin-wrapper">
   <aside class="sidebar">
     <div class="sidebar-header">
-      <h2>⚙️ Admin</h2>
+      <span class="sidebar-logo-dot"></span>
+      <span class="sidebar-logo-text">Admin</span>
     </div>
     <nav class="sidebar-menu">
       @for (item of menuItems; track item.rota) {
@@ -11,7 +12,7 @@
       }
     </nav>
     <div class="sidebar-footer">
-      <a routerLink="/cardapio" class="btn-voltar-site">🏠 Ver Site</a>
+      <a routerLink="/cardapio" class="btn-voltar-site">Ver site</a>
     </div>
   </aside>
   <main class="admin-content">

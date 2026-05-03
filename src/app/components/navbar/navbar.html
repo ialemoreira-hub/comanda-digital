@@ -1,20 +1,56 @@
 <nav class="navbar">
-  <div class="navbar-brand">
-    <a routerLink="/cardapio">🍽️ Comanda Digital</a>
-  </div>
-  <div class="navbar-links">
-    <a routerLink="/cardapio" routerLinkActive="active">Cardápio</a>
-    <a routerLink="/carrinho" routerLinkActive="active">🛒 Carrinho</a>
+  <div class="navbar-inner">
+    <a routerLink="/cardapio" class="navbar-logo">
+      <span class="logo-dot"></span>
+      Restaurante do Chef
+    </a>
 
-    @if (usuario) {
-      <span class="usuario-nome">Olá, {{ usuario.nome }}!</span>
-      @if (isAdmin()) {
-        <a routerLink="/admin" routerLinkActive="active">Admin</a>
+    <button class="btn-hamburger" (click)="toggleMenu()">
+      <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <line *ngIf="!menuAberto" x1="3" y1="6" x2="21" y2="6"/>
+        <line *ngIf="!menuAberto" x1="3" y1="12" x2="21" y2="12"/>
+        <line *ngIf="!menuAberto" x1="3" y1="18" x2="21" y2="18"/>
+        <line *ngIf="menuAberto" x1="18" y1="6" x2="6" y2="18"/>
+        <line *ngIf="menuAberto" x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+
+    <div [class]="'navbar-links ' + (menuAberto ? 'aberto' : '')">
+
+      @if (usuario) {
+        <span class="usuario-nome">Olá, {{ usuario.nome.split(' ')[0] }}</span>
+        <a routerLink="/cardapio" routerLinkActive="active">Cardápio</a>
+        @if (!isAdmin()) {
+          <a routerLink="/meus-pedidos" routerLinkActive="active">Meus Pedidos</a>
+        }
+        @if (isAdmin()) {
+          <a routerLink="/admin" routerLinkActive="active" class="btn-admin">Painel Admin</a>
+        }
+        <a routerLink="/carrinho" routerLinkActive="active" class="btn-carrinho">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+          Carrinho
+          <span class="carrinho-badge" *ngIf="totalItensCarrinho > 0">{{ totalItensCarrinho }}</span>
+        </a>
+        <div class="menu-separator"></div>
+        <button class="btn-logout" (click)="logout()">Sair</button>
+      } @else {
+        <a routerLink="/cardapio" routerLinkActive="active">Cardápio</a>
+        <a routerLink="/carrinho" routerLinkActive="active" class="btn-carrinho">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+          Carrinho
+          <span class="carrinho-badge" *ngIf="totalItensCarrinho > 0">{{ totalItensCarrinho }}</span>
+        </a>
+        <a routerLink="/login" routerLinkActive="active" class="btn-entrar">Entrar</a>
+        <a routerLink="/cadastro" routerLinkActive="active" class="btn-cadastro">Cadastre-se</a>
       }
-      <button class="btn-logout" (click)="logout()">Sair</button>
-    } @else {
-      <a routerLink="/login" routerLinkActive="active">Login</a>
-      <a routerLink="/cadastro" routerLinkActive="active" class="btn-cadastro">Cadastre-se</a>
-    }
+    </div>
   </div>
 </nav>

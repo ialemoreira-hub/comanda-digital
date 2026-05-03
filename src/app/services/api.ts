@@ -90,4 +90,81 @@ export class ApiService {
   deletarFornecedor(id: number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/admin/fornecedores/${id}`, { headers: this.getHeaders() });
   }
+  // Pedidos - Cliente
+  criarPedido(pedido: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/pedidos`, pedido, { headers: this.getHeaders() });
+  }
+
+  meusPedidos(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/pedidos/meus`, { headers: this.getHeaders() });
+  }
+
+  statusPedido(id: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/pedidos/${id}/status`, { headers: this.getHeaders() });
+  }
+
+  // Pedidos - Admin
+  listarTodosPedidos(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/admin/pedidos`, { headers: this.getHeaders() });
+  }
+
+  atualizarStatusPedido(id: number, status: string): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/admin/pedidos/${id}/status`, { status }, { headers: this.getHeaders() });
+  }
+
+  cancelarPedido(id: number, motivo: string): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/admin/pedidos/${id}/cancelar`, { motivo }, { headers: this.getHeaders() });
+  }
+  // Dashboard
+  getDashboardResumo(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/admin/dashboard/resumo`, { headers: this.getHeaders() });
+  }
+
+  getDashboardTopPratos(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/admin/dashboard/top-pratos`, { headers: this.getHeaders() });
+  }
+
+  getDashboardAlertasEstoque(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/admin/dashboard/alertas-estoque`, { headers: this.getHeaders() });
+  }
+  // Estoque
+  getEstoqueSaldo(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/admin/estoque/saldo`, { headers: this.getHeaders() });
+  }
+
+  getEstoqueAlertas(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/admin/estoque/alertas`, { headers: this.getHeaders() });
+  }
+
+  getEstoqueMovimentacoes(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/admin/estoque/movimentacoes`, { headers: this.getHeaders() });
+  }
+
+  registrarSaidaEstoque(body: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/admin/estoque/movimentacao`, body, { headers: this.getHeaders() });
+  }
+  // Compras
+  getCompras(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/admin/compras`, { headers: this.getHeaders() });
+  }
+
+  criarCompra(body: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/admin/compras`, body, { headers: this.getHeaders() });
+  }
+
+  receberCompra(id: number): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/admin/compras/${id}/receber`, {}, { headers: this.getHeaders() });
+  }
+
+  atualizarStatusCompra(id: number, status: string): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/admin/compras/${id}/status`, { status }, { headers: this.getHeaders() });
+  }
+  // Feedback do cliente
+  confirmarRecebimento(id: number): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/pedidos/${id}/confirmar-recebimento`, {}, { headers: this.getHeaders() });
+  }
+
+  enviarFeedback(id: number, feedback: string): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/pedidos/${id}/feedback`, { feedback }, { headers: this.getHeaders() });
+  }
 }

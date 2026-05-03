@@ -1,0 +1,99 @@
+<div class="meus-pedidos">
+  <div class="container">
+    <h2>Meus Pedidos</h2>
+
+    <div *ngIf="sucesso" class="sucesso">{{ sucesso }}</div>
+    <div *ngIf="carregando" class="carregando">Carregando pedidos...</div>
+
+    <div *ngIf="!carregando && pedidos.length === 0" class="vazio">
+      <p>Você ainda não fez nenhum pedido.</p>
+      <a routerLink="/cardapio" class="btn-cardapio">Ver Cardápio</a>
+    </div>
+
+    <div *ngIf="!carregando && pedidos.length > 0" class="lista-pedidos">
+      <div *ngFor="let pedido of pedidos" class="card-pedido">
+        <div class="pedido-header">
+          <span class="pedido-numero">Pedido #{{ pedido.id }}</span>
+          <span [class]="'status ' + getStatusClass(pedido.status)">
+            {{ getStatusLabel(pedido.status) }}
+          </span>
+        </div>
+
+        <div class="pedido-itens">
+          <div *ngFor="let item of pedido.itens" class="item">
+            <span>{{ item.pratoNome }} x{{ item.quantidade }}</span>
+            <span>R$ {{ item.subtotal | number:'1.2-2' }}</span>
+          </div>
+        </div>
+
+        <div class="pedido-footer">
+          <span class="data">{{ pedido.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+          <span class="total">Total: R$ {{ pedido.valorTotal | number:'1.2-2' }}</span>
+        </div>
+
+        <div *ngIf="pedido.motivoCancelamento" class="motivo-cancelamento">
+          Motivo: {{ pedido.motivoCancelamento }}
+        </div>
+
+        <!-- Ações do cliente -->
+        <div class="acoes-cliente">
+          <button *ngIf="pedido.status === 'SAIU_ENTREGA'"
+                  class="btn-confirmar-recebimento"
+                  (click)="confirmarRecebimento(pedido)">
+            Confirmar Recebimento
+          </button>
+          <button *ngIf="pedido.status === 'FINALIZADO'"
+                  class="btn-avaliar"
+                  (click)="abrirAvaliacao(pedido)">
+            Avaliar Pedido
+          </button>
+          <button *ngIf="pedido.status === 'FINALIZADO' || pedido.status === 'RECEBIDO'"
+                  class="btn-reportar"
+                  (click)="abrirReporte(pedido)">
+            Reportar Problema
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Avaliação -->
+<div class="modal-overlay" *ngIf="mostrarModalAvaliacao" (click)="fecharModais()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <h3>Avaliar Pedido #{{ pedidoSelecionado?.id }}</h3>
+
+    <div class="estrelas">
+      <span *ngFor="let e of [1,2,3,4,5]"
+            [class]="'estrela ' + (avaliacao >= e ? 'ativa' : '')"
+            (click)="setEstrela(e)">★</span>
+    </div>
+
+    <div class="campo">
+      <label>Comentário (opcional)</label>
+      <textarea [(ngModel)]="comentario" placeholder="Como foi sua experiência?" rows="3"></textarea>
+    </div>
+
+    <div class="modal-acoes">
+      <button class="btn-cancelar" (click)="fecharModais()">Cancelar</button>
+      <button class="btn-confirmar" (click)="enviarAvaliacao()">Enviar Avaliação</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Reporte -->
+<div class="modal-overlay" *ngIf="mostrarModalReporte" (click)="fecharModais()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <h3>Reportar Problema - Pedido #{{ pedidoSelecionado?.id }}</h3>
+
+    <div class="campo">
+      <label>Descreva o problema *</label>
+      <textarea [(ngModel)]="reporteTexto" placeholder="Ex: Pedido chegou errado, item faltando..." rows="4"></textarea>
+    </div>
+
+    <div class="modal-acoes">
+      <button class="btn-cancelar" (click)="fecharModais()">Cancelar</button>
+      <button class="btn-confirmar" (click)="enviarReporte()">Enviar Reporte</button>
+    </div>
+  </div>
+</div>

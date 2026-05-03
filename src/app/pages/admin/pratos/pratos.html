@@ -1,7 +1,7 @@
 <div class="admin-container">
   <div class="admin-header">
-    <h1>🍽️ Pratos</h1>
-    <button class="btn-novo" (click)="abrirFormulario()">+ Novo Prato</button>
+    <h1>Cardápio</h1>
+    <button class="btn-novo" (click)="abrirFormulario()">+ Novo prato</button>
   </div>
 
   @if (sucesso) {
@@ -11,7 +11,7 @@
   @if (mostrarFormulario) {
     <div class="modal-overlay">
       <div class="modal">
-        <h2>{{ editando ? 'Editar' : 'Novo' }} Prato</h2>
+        <h2>{{ editando ? 'Editar' : 'Novo' }} prato</h2>
 
         <div class="form-group">
           <label>Nome *</label>
@@ -24,27 +24,27 @@
         </div>
 
         <div class="form-group">
-          <label>Emoji</label>
-          <input type="text" [(ngModel)]="form.emoji" placeholder="Ex: 🍗" />
-        </div>
-
-        <div class="form-group">
           <label>Preço *</label>
           <input type="number" [(ngModel)]="form.preco" placeholder="0.00" />
         </div>
 
         <div class="form-group">
           <label>Categoria *</label>
-          <select [(ngModel)]="form.categoria">
-            <option value="">Selecione...</option>
-            @for (cat of categorias; track cat) {
-              <option [value]="cat">{{ cat }}</option>
+          <select [(ngModel)]="form.categoriaId">
+            <option [value]="null">Selecione...</option>
+            @for (cat of categorias; track cat.id) {
+              <option [value]="cat.id">{{ cat.nome }}</option>
             }
           </select>
         </div>
 
         <div class="form-group">
-          <label>Tempo de Preparo (min)</label>
+          <label>URL da Foto</label>
+          <input type="text" [(ngModel)]="form.fotoUrl" placeholder="https://..." />
+        </div>
+
+        <div class="form-group">
+          <label>Tempo de preparo (min)</label>
           <input type="number" [(ngModel)]="form.tempoPreparo" placeholder="Ex: 20" />
         </div>
 
@@ -69,11 +69,13 @@
     </div>
   }
 
-  <table class="tabela">
+  <div *ngIf="carregando" class="carregando">Carregando...</div>
+
+  <table *ngIf="!carregando" class="tabela">
     <thead>
       <tr>
         <th>ID</th>
-        <th>Prato</th>
+        <th>Nome</th>
         <th>Categoria</th>
         <th>Preço</th>
         <th>Tempo</th>
@@ -84,15 +86,21 @@
     <tbody>
       @for (prato of pratos; track prato.id) {
         <tr>
-          <td>{{ prato.id }}</td>
-          <td>{{ prato.emoji }} {{ prato.nome }}</td>
-          <td>{{ prato.categoria }}</td>
-          <td>R$ {{ prato.preco.toFixed(2) }}</td>
+          <td class="td-id">{{ prato.id }}</td>
+          <td class="td-nome">{{ prato.nome }}</td>
+          <td>{{ getNomeCategoria(prato.categoriaId) }}</td>
+          <td>R$ {{ prato.precoVenda | number:'1.2-2' }}</td>
           <td>{{ prato.tempoPreparo }} min</td>
           <td><span [class]="'badge-' + prato.status.toLowerCase()">{{ prato.status }}</span></td>
-          <td>
-            <button class="btn-editar" (click)="editar(prato)">✏️ Editar</button>
-            <button class="btn-excluir" (click)="excluir(prato.id)">🗑️ Excluir</button>
+          <td class="td-acoes">
+            <button class="btn-editar" (click)="editar(prato)">
+              <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Editar
+            </button>
+            <button class="btn-excluir" (click)="excluir(prato.id)">
+              <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+              Excluir
+            </button>
           </td>
         </tr>
       }

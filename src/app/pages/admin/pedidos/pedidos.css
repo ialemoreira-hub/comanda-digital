@@ -1,0 +1,157 @@
+.admin-pedidos {
+  padding: 30px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+h2 {
+  font-size: 1.8rem;
+  color: #333;
+}
+
+.btn-atualizar {
+  padding: 8px 20px;
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.btn-atualizar:hover {
+  background: #555;
+}
+
+.carregando, .vazio {
+  text-align: center;
+  padding: 60px;
+  color: #666;
+}
+
+.card-pedido {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.pedido-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.pedido-numero {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.cliente {
+  color: #666;
+  font-size: 0.95rem;
+  flex: 1;
+}
+
+.status {
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.status-recebido { background: #e3f2fd; color: #1565c0; }
+.status-confirmado { background: #e8f5e9; color: #2e7d32; }
+.status-preparo { background: #fff3e0; color: #e65100; }
+.status-pronto { background: #f3e5f5; color: #6a1b9a; }
+.status-entrega { background: #e0f7fa; color: #00695c; }
+.status-finalizado { background: #e8f5e9; color: #1b5e20; }
+.status-cancelado { background: #ffebee; color: #b71c1c; }
+
+.pedido-itens {
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  padding: 10px 0;
+  margin-bottom: 10px;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 0;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.endereco, .observacoes {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.pedido-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.data {
+  color: #999;
+  font-size: 0.85rem;
+}
+
+.total {
+  font-weight: 700;
+  color: #c0392b;
+}
+
+.acoes {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-avancar {
+  padding: 8px 20px;
+  background: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-avancar:hover {
+  background: #1b5e20;
+}
+
+.btn-cancelar {
+  padding: 8px 20px;
+  background: #ffebee;
+  color: #b71c1c;
+  border: 1px solid #b71c1c;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-cancelar:hover {
+  background: #b71c1c;
+  color: white;
+}
+
+.motivo {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: #ffebee;
+  border-radius: 6px;
+  color: #b71c1c;
+  font-size: 0.9rem;
+}

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
 import { ApiService } from '../../services/api';
+import { CarrinhoService } from '../../services/carrinho';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,11 @@ export class LoginComponent {
   erro = '';
   carregando = false;
 
-  constructor(private router: Router, private apiService: ApiService) {}
+  constructor(
+    private router: Router,
+    private apiService: ApiService,
+    private carrinhoService: CarrinhoService
+  ) {}
 
   login() {
     if (!this.email || !this.senha) {
@@ -30,6 +35,7 @@ export class LoginComponent {
 
     this.apiService.login(this.email, this.senha).subscribe({
       next: (response) => {
+        this.carrinhoService.limpar();
         localStorage.setItem('token', response.token);
         localStorage.setItem('usuario', JSON.stringify({
           nome: response.nome,

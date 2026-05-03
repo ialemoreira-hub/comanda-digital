@@ -23,14 +23,39 @@ export class CadastroComponent {
 
   constructor(private router: Router, private apiService: ApiService) {}
 
+  formatarTelefone(valor: string): string {
+    const nums = valor.replace(/\D/g, '').slice(0, 11);
+    if (nums.length <= 2) return nums;
+    if (nums.length <= 7) return `(${nums.slice(0,2)}) ${nums.slice(2)}`;
+    if (nums.length <= 11) return `(${nums.slice(0,2)}) ${nums.slice(2,7)}-${nums.slice(7)}`;
+    return valor;
+  }
+
+  onTelefoneInput(event: any) {
+    this.telefone = this.formatarTelefone(event.target.value);
+    event.target.value = this.telefone;
+  }
+
   cadastrar() {
-    if (!this.nome || !this.email || !this.senha || !this.confirmarSenha) {
+    if (!this.nome.trim() || !this.email.trim() || !this.senha || !this.confirmarSenha) {
       this.erro = 'Preencha todos os campos obrigatórios!';
       return;
     }
 
-    if (!this.email.includes('@')) {
+    if (this.nome.trim().length < 3) {
+      this.erro = 'Nome deve ter no mínimo 3 caracteres!';
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(this.email)) {
       this.erro = 'Email inválido!';
+      return;
+    }
+
+    const telefoneLimpo = this.telefone.replace(/\D/g, '');
+    if (this.telefone && telefoneLimpo.length < 10) {
+      this.erro = 'Telefone inválido! Use o formato (11) 99999-9999';
       return;
     }
 

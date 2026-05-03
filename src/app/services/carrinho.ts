@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 export interface ItemCarrinho {
   id: number;
   nome: string;
   preco: number;
-  emoji: string;
   quantidade: number;
+  foto_url?: string;
+  observacoes?: string;
 }
 
 @Injectable({
@@ -14,6 +16,12 @@ export interface ItemCarrinho {
 export class CarrinhoService {
 
   private itens: ItemCarrinho[] = [];
+  private itensSubject = new BehaviorSubject<ItemCarrinho[]>([]);
+  itens$ = this.itensSubject.asObservable();
+
+  private emitir() {
+    this.itensSubject.next([...this.itens]);
+  }
 
   adicionar(prato: any) {
     const item = this.itens.find(i => i.id === prato.id);
@@ -22,10 +30,12 @@ export class CarrinhoService {
     } else {
       this.itens.push({ ...prato, quantidade: 1 });
     }
+    this.emitir();
   }
 
   remover(id: number) {
     this.itens = this.itens.filter(i => i.id !== id);
+    this.emitir();
   }
 
   alterarQuantidade(id: number, quantidade: number) {
@@ -37,6 +47,7 @@ export class CarrinhoService {
         item.quantidade = quantidade;
       }
     }
+    this.emitir();
   }
 
   getItens(): ItemCarrinho[] {
@@ -53,5 +64,6 @@ export class CarrinhoService {
 
   limpar() {
     this.itens = [];
+    this.emitir();
   }
 }

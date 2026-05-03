@@ -1,17 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-interface Prato {
-  id: number;
-  nome: string;
-  descricao: string;
-  preco: number;
-  emoji: string;
-  categoria: string;
-  status: string;
-  tempoPreparo: number;
-}
+import { ApiService } from '../../../services/api';
 
 @Component({
   selector: 'app-pratos',
@@ -19,65 +9,131 @@ interface Prato {
   templateUrl: './pratos.html',
   styleUrl: './pratos.css'
 })
-export class PratosComponent {
+export class PratosComponent implements OnInit {
 
+  pratos: any[] = [];
+  categorias: any[] = [];
   mostrarFormulario = false;
   editando = false;
   erro = '';
   sucesso = '';
+  carregando = true;
 
-  categorias = ['Entradas', 'Pratos Principais', 'Sobremesas', 'Bebidas'];
+  form: any = {
+    nome: '', descricao: '', preco: 0, fotoUrl: '',
+    tempoPreparo: 0, categoriaId: null, status: 'ATIVO'
+  };
 
-  pratos: Prato[] = [
-    { id: 1, nome: 'Bruschetta', descricao: 'Pão tostado com tomate', preco: 18.90, emoji: '🥖', categoria: 'Entradas', status: 'ATIVO', tempoPreparo: 10 },
-    { id: 2, nome: 'Frango Grelhado', descricao: 'Frango com legumes', preco: 42.90, emoji: '🍗', categoria: 'Pratos Principais', status: 'ATIVO', tempoPreparo: 25 },
-    { id: 3, nome: 'Pudim', descricao: 'Pudim de leite condensado', preco: 16.90, emoji: '🍮', categoria: 'Sobremesas', status: 'ATIVO', tempoPreparo: 5 },
-    { id: 4, nome: 'Suco Natural', descricao: 'Suco de fruta natural', preco: 12.90, emoji: '🥤', categoria: 'Bebidas', status: 'ATIVO', tempoPreparo: 5 },
-  ];
+  constructor(private apiService: ApiService) {}
 
-  form: Prato = { id: 0, nome: '', descricao: '', preco: 0, emoji: '', categoria: '', status: 'ATIVO', tempoPreparo: 0 };
+  ngOnInit() {
+    this.carregarPratos();
+    this.carregarCategorias();
+  }
+
+  carregarPratos() {
+    this.carregando = true;
+    this.apiService.getPratosAdmin(0, 100).subscribe({
+      next: (data: any) => {
+        this.pratos = data.content || data;
+        this.carregando = false;
+      },
+      error: () => this.carregando = false
+    });
+  }
+
+  carregarCategorias() {
+    this.apiService.getCategorias().subscribe({
+      next: (data) => this.categorias = data,
+      error: () => {}
+    });
+  }
 
   abrirFormulario() {
-    this.form = { id: 0, nome: '', descricao: '', preco: 0, emoji: '', categoria: '', status: 'ATIVO', tempoPreparo: 0 };
+    this.form = {
+      nome: '', descricao: '', preco: 0, fotoUrl: '',
+      tempoPreparo: 0, categoriaId: null, status: 'ATIVO'
+    };
     this.editando = false;
+    this.erro = '';
     this.mostrarFormulario = true;
   }
 
-  editar(prato: Prato) {
-    this.form = { ...prato };
+  editar(prato: any) {
+    this.form = {
+      id: prato.id,
+      nome: prato.nome,
+      descricao: prato.descricao,
+      preco: prato.precoVenda,
+      fotoUrl: prato.fotoUrl || '',
+      tempoPreparo: prato.tempoPreparo,
+      categoriaId: prato.categoriaId,
+      status: prato.status
+    };
     this.editando = true;
+    this.erro = '';
     this.mostrarFormulario = true;
   }
 
   salvar() {
-    if (!this.form.nome || !this.form.categoria || this.form.preco <= 0) {
+    if (!this.form.nome || !this.form.categoriaId || this.form.preco <= 0) {
       this.erro = 'Preencha todos os campos obrigatórios!';
       return;
     }
 
-    if (this.editando) {
-      const index = this.pratos.findIndex(p => p.id === this.form.id);
-      this.pratos[index] = { ...this.form };
-      this.sucesso = 'Prato atualizado com sucesso!';
-    } else {
-      this.form.id = this.pratos.length + 1;
-      this.pratos.push({ ...this.form });
-      this.sucesso = 'Prato criado com sucesso!';
-    }
+    const dto = {
+      nome: this.form.nome,
+      descricao: this.form.descricao,
+      precoVenda: this.form.preco,
+      fotoUrl: this.form.fotoUrl,
+      tempoPreparo: this.form.tempoPreparo,
+      categoriaId: this.form.categoriaId,
+      status: this.form.status
+    };
 
-    this.erro = '';
-    this.mostrarFormulario = false;
-    setTimeout(() => this.sucesso = '', 3000);
+    if (this.editando) {
+      this.apiService.atualizarPrato(this.form.id, dto).subscribe({
+        next: () => {
+          this.sucesso = 'Prato atualizado com sucesso!';
+          this.mostrarFormulario = false;
+          this.carregarPratos();
+          setTimeout(() => this.sucesso = '', 3000);
+        },
+        error: (err) => this.erro = err.error?.message || 'Erro ao atualizar prato.'
+      });
+    } else {
+      this.apiService.criarPrato(dto).subscribe({
+        next: () => {
+          this.sucesso = 'Prato criado com sucesso!';
+          this.mostrarFormulario = false;
+          this.carregarPratos();
+          setTimeout(() => this.sucesso = '', 3000);
+        },
+        error: (err) => this.erro = err.error?.message || 'Erro ao criar prato.'
+      });
+    }
   }
 
   excluir(id: number) {
     if (confirm('Deseja excluir este prato?')) {
-      this.pratos = this.pratos.filter(p => p.id !== id);
+      this.apiService.deletarPrato(id).subscribe({
+        next: () => {
+          this.sucesso = 'Prato excluído com sucesso!';
+          this.carregarPratos();
+          setTimeout(() => this.sucesso = '', 3000);
+        },
+        error: (err) => alert('Erro ao excluir: ' + (err.error?.message || err.message))
+      });
     }
   }
 
   cancelar() {
     this.mostrarFormulario = false;
     this.erro = '';
+  }
+
+  getNomeCategoria(categoriaId: number): string {
+    const cat = this.categorias.find(c => c.id === categoriaId);
+    return cat ? cat.nome : '-';
   }
 }

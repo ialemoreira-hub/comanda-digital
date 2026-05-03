@@ -1,122 +1,142 @@
 .admin-container {
-  padding: 30px;
+  padding: 32px 30px 64px;
   max-width: 1100px;
   margin: 0 auto;
+  font-family: 'Sora', sans-serif;
 }
 
 .admin-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 25px;
+  margin-bottom: 28px;
 }
 
 .admin-header h1 {
-  color: #c0392b;
-  font-size: 28px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #212121;
+  margin: 0;
+  letter-spacing: -0.4px;
 }
 
 .btn-novo {
-  background: #c0392b;
+  background: #EA1D2C;
   color: white;
   border: none;
   padding: 10px 20px;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 15px;
-  transition: background 0.3s;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Sora', sans-serif;
+  transition: background 0.15s;
 }
 
-.btn-novo:hover {
-  background: #a93226;
-}
+.btn-novo:hover { background: #C4101D; }
 
 .alert-sucesso {
-  background: #f0fff4;
-  color: #27ae60;
-  border: 1px solid #27ae60;
-  padding: 10px 15px;
+  background: #E8F5E9;
+  color: #2E7D32;
+  border: 1px solid #C8E6C9;
+  padding: 12px 16px;
   border-radius: 8px;
   margin-bottom: 20px;
+  font-size: 14px;
 }
 
 .alert-erro {
-  background: #fdf2f2;
-  color: #c0392b;
-  border: 1px solid #c0392b;
-  padding: 10px 15px;
+  background: #FFF0F1;
+  color: #EA1D2C;
+  border: 1px solid #FFD6D9;
+  padding: 12px 16px;
   border-radius: 8px;
-  margin-bottom: 15px;
+  margin-bottom: 16px;
+  font-size: 14px;
 }
 
 .tabela {
   width: 100%;
   border-collapse: collapse;
   background: white;
-  border-radius: 12px;
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border: 1px solid #EEEEEE;
+  font-size: 14px;
 }
 
-.tabela thead {
-  background: #c0392b;
-  color: white;
-}
+.tabela thead { background: #FAFAFA; }
 
-.tabela th, .tabela td {
-  padding: 14px 16px;
+.tabela th {
+  padding: 12px 16px;
   text-align: left;
-  border-bottom: 1px solid #eee;
+  font-size: 12px;
+  font-weight: 600;
+  color: #9E9E9E;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #EEEEEE;
 }
 
-.tabela tbody tr:hover {
-  background: #fdf2f2;
+.tabela td {
+  padding: 14px 16px;
+  color: #212121;
+  border-bottom: 1px solid #FAFAFA;
+  font-weight: 400;
 }
 
-.badge-ativo {
-  background: #d4edda;
-  color: #155724;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 13px;
-}
+.tabela tbody tr:last-child td { border-bottom: none; }
+.tabela tbody tr:hover { background: #FAFAFA; }
 
-.badge-inativo {
-  background: #f8d7da;
-  color: #721c24;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 13px;
-}
+.td-id { color: #9E9E9E; font-weight: 500; }
+.td-nome { font-weight: 600; }
+
+.badge-ativo { background: #E8F5E9; color: #2E7D32; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+.badge-inativo { background: #F5F5F5; color: #757575; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+
+.td-acoes { display: flex; gap: 8px; align-items: center; }
 
 .btn-editar {
-  background: #3498db;
-  color: white;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #F5F5F5;
+  color: #424242;
   border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
+  padding: 7px 14px;
+  border-radius: 7px;
   cursor: pointer;
-  margin-right: 5px;
   font-size: 13px;
+  font-weight: 500;
+  font-family: 'Sora', sans-serif;
+  transition: background 0.15s;
 }
 
+.btn-editar:hover { background: #EEEEEE; color: #212121; }
+
 .btn-excluir {
-  background: #e74c3c;
-  color: white;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #FFF0F1;
+  color: #EA1D2C;
   border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
+  padding: 7px 14px;
+  border-radius: 7px;
   cursor: pointer;
   font-size: 13px;
+  font-weight: 500;
+  font-family: 'Sora', sans-serif;
+  transition: background 0.15s;
 }
+
+.btn-excluir:hover { background: #FFD6D9; }
 
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.4);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -125,75 +145,84 @@
 
 .modal {
   background: white;
-  padding: 35px;
+  padding: 32px;
   border-radius: 16px;
   width: 100%;
-  max-width: 480px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  max-width: 460px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .modal h2 {
-  color: #c0392b;
-  margin-bottom: 25px;
-  font-size: 22px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #212121;
+  margin: 0 0 24px;
+  letter-spacing: -0.3px;
 }
 
-.form-group {
-  margin-bottom: 18px;
-}
+.form-group { margin-bottom: 16px; }
 
 .form-group label {
   display: block;
   margin-bottom: 6px;
-  color: #333;
-  font-weight: 600;
-  font-size: 14px;
+  color: #616161;
+  font-weight: 500;
+  font-size: 13px;
 }
 
 .form-group input,
 .form-group select {
   width: 100%;
   padding: 10px 14px;
-  border: 2px solid #eee;
+  border: 1px solid #E0E0E0;
   border-radius: 8px;
   font-size: 14px;
+  font-family: 'Sora', sans-serif;
   box-sizing: border-box;
-  transition: border 0.3s;
+  transition: border 0.15s;
+  color: #212121;
 }
 
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #c0392b;
+  border-color: #EA1D2C;
 }
 
 .modal-acoes {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-  margin-top: 20px;
+  margin-top: 24px;
 }
 
 .btn-cancelar {
-  background: white;
-  color: #666;
-  border: 2px solid #eee;
+  background: transparent;
+  color: #757575;
+  border: 1px solid #E0E0E0;
   padding: 10px 20px;
   border-radius: 8px;
   cursor: pointer;
   font-size: 14px;
+  font-family: 'Sora', sans-serif;
+  transition: all 0.15s;
 }
+
+.btn-cancelar:hover { background: #F5F5F5; color: #212121; }
 
 .btn-salvar {
-  background: #c0392b;
+  background: #EA1D2C;
   color: white;
   border: none;
-  padding: 10px 20px;
+  padding: 10px 24px;
   border-radius: 8px;
   cursor: pointer;
   font-size: 14px;
+  font-weight: 600;
+  font-family: 'Sora', sans-serif;
+  transition: background 0.15s;
 }
 
-.btn-salvar:hover {
-  background: #a93226;
-}
+.btn-salvar:hover { background: #C4101D; }

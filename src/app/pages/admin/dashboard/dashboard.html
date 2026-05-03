@@ -1,61 +1,79 @@
 <div class="dashboard-container">
-  <h1>📊 Dashboard</h1>
+  <div class="page-header">
+    <h1>Dashboard</h1>
+    <span class="page-sub">Visão geral do dia</span>
+  </div>
 
   <div class="kpis-grid">
-    <div class="kpi-card" *ngFor="let kpi of kpis" [style.border-left-color]="kpi.cor">
-      <div class="kpi-icone">{{ kpi.icone }}</div>
-      <div class="kpi-info">
-        <span class="kpi-titulo">{{ kpi.titulo }}</span>
-        <span class="kpi-valor" [style.color]="kpi.cor">{{ kpi.valor }}</span>
-      </div>
+    <div class="kpi-card">
+      <span class="kpi-titulo">FATURAMENTO DO DIA</span>
+      <span class="kpi-valor">R$ {{ resumo.faturamentoDia | number:'1.2-2' }}</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-titulo">TOTAL DE PEDIDOS</span>
+      <span class="kpi-valor">{{ resumo.totalPedidos }}</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-titulo">TICKET MÉDIO</span>
+      <span class="kpi-valor">R$ {{ resumo.ticketMedio | number:'1.2-2' }}</span>
     </div>
   </div>
 
   <div class="dashboard-grid">
     <div class="card">
-      <h2>🏆 Top 5 Pratos</h2>
-      <div class="top-prato" *ngFor="let prato of topPratos; let i = index">
-        <span class="posicao">{{ i + 1 }}º</span>
-        <span class="prato-emoji">{{ prato.emoji }}</span>
-        <span class="prato-nome">{{ prato.nome }}</span>
-        <span class="prato-qtd">{{ prato.quantidade }} vendidos</span>
-      </div>
+      <h2>Top 5 pratos</h2>
+      <canvas #graficoTopPratos></canvas>
+      <div *ngIf="topPratos.length === 0" class="vazio">Nenhum prato vendido ainda.</div>
     </div>
 
     <div class="card">
-      <h2>⚠️ Alertas de Estoque</h2>
-      <div class="alerta-item" *ngFor="let alerta of alertasEstoque">
-        <span class="alerta-nome">{{ alerta.nome }}</span>
-        <span class="alerta-info">{{ alerta.estoque }} / {{ alerta.minimo }} {{ alerta.unidade }}</span>
-        <span class="badge-critico">Crítico</span>
-      </div>
+      <h2>Status dos pedidos</h2>
+      <canvas #graficoPedidos></canvas>
+      <div *ngIf="pedidosRecentes.length === 0" class="vazio">Nenhum pedido ainda.</div>
     </div>
   </div>
 
-  <div class="card">
-    <h2>📋 Pedidos Recentes</h2>
-    <table class="tabela">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Cliente</th>
-          <th>Total</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let pedido of pedidosRecentes">
-          <td>#{{ pedido.id }}</td>
-          <td>{{ pedido.cliente }}</td>
-          <td>R$ {{ pedido.total.toFixed(2) }}</td>
-          <td><span [class]="'badge-' + pedido.status.toLowerCase()">{{ pedido.status }}</span></td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="dashboard-grid">
+    <div class="card">
+      <h2>Alertas de estoque</h2>
+      <div class="alerta-item" *ngFor="let alerta of alertasEstoque">
+        <div class="alerta-left">
+          <span class="alerta-nome">{{ alerta.nome }}</span>
+          <span class="alerta-info">{{ alerta.estoque }} / {{ alerta.minimo }} {{ alerta.unidade }}</span>
+        </div>
+        <span class="badge-critico">Crítico</span>
+      </div>
+      <div *ngIf="alertasEstoque.length === 0" class="vazio">Estoque OK!</div>
+    </div>
+
+    <div class="card">
+      <h2>Pedidos recentes</h2>
+      <table class="tabela">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Total</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let pedido of pedidosRecentes">
+            <td class="td-id">#{{ pedido.id }}</td>
+            <td>{{ pedido.clienteNome }}</td>
+            <td>R$ {{ pedido.valorTotal | number:'1.2-2' }}</td>
+            <td><span [class]="'badge-status badge-' + pedido.status.toLowerCase()">{{ pedido.status }}</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <div *ngIf="pedidosRecentes.length === 0" class="vazio">Nenhum pedido ainda.</div>
+    </div>
   </div>
 
   <div class="atalhos">
-    <a routerLink="/admin/pratos" class="atalho">🍽️ Gerenciar Pratos</a>
-    <a routerLink="/admin/categorias" class="atalho">📂 Gerenciar Categorias</a>
+    <a routerLink="/admin/pratos" class="atalho">Gerenciar pratos</a>
+    <a routerLink="/admin/categorias" class="atalho">Gerenciar categorias</a>
+    <a routerLink="/admin/pedidos" class="atalho">Gerenciar pedidos</a>
+    <a routerLink="/admin/estoque" class="atalho">Ver estoque</a>
   </div>
 </div>

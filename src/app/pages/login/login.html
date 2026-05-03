@@ -1,6 +1,10 @@
-<div class="auth-container">
+<div class="auth-page">
   <div class="auth-card">
-    <h2>🔐 Entrar</h2>
+    <div class="auth-logo">
+      <span class="logo-text">Comanda Digital</span>
+    </div>
+
+    <h2 class="auth-title">Entrar na conta</h2>
     <p class="auth-subtitle">Acesse sua conta para fazer pedidos</p>
 
     <div class="form-group">
@@ -10,10 +14,12 @@
 
     <div class="form-group">
       <label>Senha</label>
-      <input type="password" [(ngModel)]="senha" placeholder="Sua senha" />
+      <input type="password" [(ngModel)]="senha" placeholder="Sua senha" (keyup.enter)="login()" />
     </div>
 
-    <div class="alert-erro" *ngIf="erro">{{ erro }}</div>
+    @if (erro) {
+      <div class="alert-erro">{{ erro }}</div>
+    }
 
     <button class="btn-primary" (click)="login()">Entrar</button>
 

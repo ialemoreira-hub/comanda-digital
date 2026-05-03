@@ -1,0 +1,85 @@
+<div class="compras-container">
+  <div class="header">
+    <h2>Pedidos de Compra</h2>
+    <button class="btn-novo" (click)="abrirModal()">+ Nova Compra</button>
+  </div>
+
+  <div *ngIf="sucesso" class="sucesso">{{ sucesso }}</div>
+  <div *ngIf="carregando" class="carregando">Carregando...</div>
+
+  <div *ngIf="!carregando && compras.length === 0" class="vazio">
+    Nenhum pedido de compra ainda.
+  </div>
+
+  <div *ngIf="!carregando && compras.length > 0" class="lista">
+    <div *ngFor="let compra of compras" class="card-compra">
+      <div class="compra-header">
+        <span class="compra-id">Compra #{{ compra.id }}</span>
+        <span class="fornecedor">{{ compra.fornecedorNome }}</span>
+        <span [class]="'status ' + getStatusClass(compra.status)">{{ compra.status }}</span>
+      </div>
+
+      <div class="compra-itens">
+        <div *ngFor="let item of compra.itens" class="item">
+          <span>{{ item.ingredienteNome }} — {{ item.quantidade }} un</span>
+          <span>R$ {{ item.subtotal | number:'1.2-2' }}</span>
+        </div>
+      </div>
+
+      <div class="compra-footer">
+        <span class="data">{{ compra.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+        <span class="total">Total: R$ {{ compra.valorTotal | number:'1.2-2' }}</span>
+      </div>
+
+      <div class="acoes" *ngIf="compra.status !== 'RECEBIDO' && compra.status !== 'CANCELADO'">
+        <button *ngIf="compra.status === 'RASCUNHO'" class="btn-enviar" (click)="enviarCompra(compra.id)">
+          Enviar ao Fornecedor
+        </button>
+        <button class="btn-receber" (click)="receberCompra(compra.id)">
+          Registrar Recebimento
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Nova Compra -->
+<div class="modal-overlay" *ngIf="mostrarModal" (click)="fecharModal()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <h3>Nova Compra</h3>
+
+    <div class="campo">
+      <label>Fornecedor *</label>
+      <select [(ngModel)]="form.fornecedorId">
+        <option [value]="null">Selecione...</option>
+        <option *ngFor="let f of fornecedores" [value]="f.id">{{ f.razaoSocial }}</option>
+      </select>
+    </div>
+
+    <div class="itens-header">
+      <label>Itens</label>
+      <button class="btn-add-item" (click)="adicionarItem()">+ Item</button>
+    </div>
+
+    <div *ngFor="let item of form.itens; let i = index" class="item-form">
+      <select [(ngModel)]="item.ingredienteId">
+        <option [value]="null">Ingrediente...</option>
+        <option *ngFor="let ing of ingredientes" [value]="ing.id">{{ ing.nome }}</option>
+      </select>
+      <input type="number" [(ngModel)]="item.quantidade" placeholder="Qtd" min="0" step="0.001" />
+      <input type="number" [(ngModel)]="item.precoUnitario" placeholder="Preço unit." min="0" step="0.01" />
+      <button class="btn-remover" (click)="removerItem(i)" *ngIf="form.itens.length > 1">×</button>
+    </div>
+
+    <div class="total-compra">
+      Total: R$ {{ calcularTotal() | number:'1.2-2' }}
+    </div>
+
+    <div *ngIf="erro" class="erro">{{ erro }}</div>
+
+    <div class="modal-acoes">
+      <button class="btn-cancelar" (click)="fecharModal()">Cancelar</button>
+      <button class="btn-confirmar" (click)="salvarCompra()">Criar Pedido</button>
+    </div>
+  </div>
+</div>

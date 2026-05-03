@@ -8,6 +8,10 @@ import { AdminLayoutComponent } from './components/admin-layout/admin-layout';
 import { DashboardComponent } from './pages/admin/dashboard/dashboard';
 import { PratosComponent } from './pages/admin/pratos/pratos';
 import { CategoriasComponent } from './pages/admin/categorias/categorias';
+import { MeusPedidosComponent } from './pages/meus-pedidos/meus-pedidos';
+import { PedidosComponent } from './pages/admin/pedidos/pedidos';
+import { EstoqueComponent } from './pages/admin/estoque/estoque';
+import { ComprasComponent } from './pages/admin/compras/compras';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'cardapio', pathMatch: 'full' },
@@ -16,6 +20,8 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'cadastro', component: CadastroComponent },
   { path: 'pedido-confirmado', component: PedidoConfirmadoComponent },
+  { path: 'meus-pedidos', component: MeusPedidosComponent },
+  
   {
     path: 'admin',
     component: AdminLayoutComponent,
@@ -24,6 +30,9 @@ export const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'pratos', component: PratosComponent },
       { path: 'categorias', component: CategoriasComponent },
+      { path: 'pedidos', component: PedidosComponent },
+      { path: 'estoque', component: EstoqueComponent },
+      { path: 'compras', component: ComprasComponent },
     ]
   },
 ];
