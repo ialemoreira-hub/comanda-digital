@@ -238,4 +238,19 @@
   .dashboard-container { padding: 24px 16px 48px; }
   .dashboard-grid { grid-template-columns: 1fr; }
   .kpis-grid { grid-template-columns: 1fr 1fr; }
+}@media (max-width: 480px) {
+  .kpis-grid { grid-template-columns: 1fr; }
+  
+  .card { padding: 16px; }
+  
+  .tabela { display: block; overflow-x: auto; }
+  
+  .tabela th, .tabela td { 
+    padding: 10px 8px; 
+    font-size: 12px;
+  }
+  
+  .atalhos { flex-direction: column; }
+  
+  .atalho { text-align: center; }
 }
