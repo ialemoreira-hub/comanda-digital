@@ -20,7 +20,15 @@ jobs:
         run: npm install --legacy-peer-deps
 
       - name: Fix beasties bug
-        run: node -e "const fs=require('fs');const p='node_modules/@angular/build/node_modules/beasties/dist/index.cjs';let c=fs.readFileSync(p,'utf8');c=c.replaceAll('?.insertBefore','&&c.parentNode.insertBefore');fs.writeFileSync(p,c);console.log('Fixed!');"
+        run: |
+          node -e "
+            const fs = require('fs');
+            const p = 'node_modules/@angular/build/node_modules/beasties/dist/index.cjs';
+            let c = fs.readFileSync(p, 'utf8');
+            c = c.replace('link.parentNode?.insertBefore', 'link.parentNode && link.parentNode.insertBefore');
+            fs.writeFileSync(p, c);
+            console.log('Fixed!');
+          "
 
       - name: Build
         run: npx ng build --configuration=production
