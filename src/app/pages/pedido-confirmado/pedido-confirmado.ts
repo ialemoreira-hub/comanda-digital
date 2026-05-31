@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { CarrinhoService } from '../../services/carrinho';
 
 @Component({
   selector: 'app-pedido-confirmado',
@@ -10,11 +9,12 @@ import { CarrinhoService } from '../../services/carrinho';
 })
 export class PedidoConfirmadoComponent implements OnInit {
 
-  numeroPedido = Math.floor(Math.random() * 9000) + 1000;
-
-  constructor(private carrinhoService: CarrinhoService) {}
+  numeroPedido: number = 0;
 
   ngOnInit() {
-    this.carrinhoService.limpar();
+    const pedido = localStorage.getItem('ultimo_pedido');
+    if (pedido) {
+      this.numeroPedido = JSON.parse(pedido).id;
+    }
   }
 }
